@@ -22,6 +22,7 @@ class App extends Component {
     this.setPage = this.setPage.bind(this);
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     this.handleRegisterSubmit = this.handleRegisterSubmit.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   // PAGINATION
@@ -59,6 +60,7 @@ class App extends Component {
       this.setState({
         auth: res.data.auth,
         user: res.data.user,
+        currentPage: 'home',
       });
     }).catch(err => console.log(err));
   }
@@ -73,8 +75,19 @@ class App extends Component {
       this.setState({
         auth: res.data.auth,
         user: res.data.user,
+        currentPage: 'home',
       });
     }).catch(err => console.log(err));
+  }
+
+  logOut() {
+    axios.get('/auth/logout')
+      .then(res => {
+        this.setState({
+          auth: false,
+          currentPage: 'home',
+        })
+      }).catch(err => console.log(err));
   }
 
   // RENDER
@@ -82,7 +95,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header setPage={this.setPage} />
+        <Header setPage={this.setPage} logOut={this.logOut} />
         {this.decideWhichPage()}
         <Footer />
       </div>
