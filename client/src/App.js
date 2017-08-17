@@ -56,7 +56,10 @@ class App extends Component {
       username,
       password,
     }).then(res => {
-      console.log(res);
+      this.setState({
+        auth: res.data.auth,
+        user: res.data.user,
+      });
     }).catch(err => console.log(err));
   }
 
@@ -67,7 +70,10 @@ class App extends Component {
       password,
       email,
     }).then(res => {
-      console.log(res);
+      this.setState({
+        auth: res.data.auth,
+        user: res.data.user,
+      });
     }).catch(err => console.log(err));
   }
 
