@@ -16,6 +16,7 @@ app.use(cookieParser());
 app.use(
   session({
     key: process.env.SECRET_KEY,
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
   }),
@@ -36,10 +37,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
-const userRoutes = require('./routes/user-routes');
-app.use('/user', userRoutes);
+*/
+
 const authRoutes = require('./routes/auth-routes');
 app.use('/auth', authRoutes);
+
+/*
 const movieRoutes = require('./routes/movie-routes');
 app.use('/movies', movieRoutes);
 
