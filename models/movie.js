@@ -16,21 +16,21 @@ Movie.findById = (id) => {
 Movie.create = (movie, userId) => {
   return db.one(`
     INSERT INTO movies
-    (title, year, genre, user_id)
+    (title, description, genre, user_id)
     VALUES ($1, $2, $3, $4)
     RETURNING *
-  `, [movie.title, movie.year, movie.genre, userId]);
+  `, [movie.title, movie.description, movie.genre, userId]);
 }
 
 Movie.update = (movie, id) => {
   return db.one(`
     UPDATE movies SET
     title = $1,
-    year = $2,
+    description = $2,
     genre = $3
     WHERE id = $4
     RETURNING *
-  `, [movie.title, movie.year, movie.genre, id]);
+  `, [movie.title, movie.description, movie.genre, id]);
 }
 
 Movie.destroy = (id) => {

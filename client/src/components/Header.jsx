@@ -7,7 +7,7 @@ const Header = (props) => {
       <nav>
         <ul>
           <li onClick={() => props.setPage('home')}>Home</li>
-          <li onClick={() => props.setPage('movies-all')}>Movies</li>
+          <li onClick={() => props.setPage('movies')}>Movies</li>
           <li onClick={() => props.setPage('login')}>Log In</li>
           <li onClick={() => props.setPage('register')}>Register</li>
           <li onClick={() => props.setPage('user')}>User Dashboard</li>

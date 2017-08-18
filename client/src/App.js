@@ -10,6 +10,8 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 
+import MoviesList from './components/MoviesList';
+
 class App extends Component {
   constructor() {
     super();
@@ -18,11 +20,26 @@ class App extends Component {
       user: null,
       currentPage: 'home',
       currentMovieId: null,
+      movieData: null,
     }
     this.setPage = this.setPage.bind(this);
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     this.handleRegisterSubmit = this.handleRegisterSubmit.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.handleMovieSubmit = this.handleMovieSubmit.bind(this);
+    this.handleMovieEditSubmit = this.handleMovieEditSubmit.bind(this);
+    this.selectEditedMovie = this.selectEditedMovie.bind(this);
+  }
+
+  // LIFECYCLE
+
+  componentDidMount() {
+    axios.get('/movies')
+      .then(res => {
+        this.setState({
+          movieData: res.data.data,
+        });
+      }).catch(err => console.log(err));
   }
 
   // PAGINATION
@@ -44,6 +61,15 @@ class App extends Component {
         break;
       case 'register':
         return <Register handleRegisterSubmit={this.handleRegisterSubmit} />;
+        break;
+      case 'movies':
+        return (<MoviesList 
+          movieData={this.state.movieData} 
+          handleMovieSubmit={this.handleMovieSubmit} 
+          handleMovieEditSubmit={this.handleMovieEditSubmit}
+          selectEditedMovie={this.selectEditedMovie}
+          currentMovieId={this.state.currentMovieId}  />)
+        break;
       default:
         break;
     }
@@ -86,6 +112,46 @@ class App extends Component {
         this.setState({
           auth: false,
           currentPage: 'home',
+        })
+      }).catch(err => console.log(err));
+  }
+
+  // MOVIES
+
+  handleMovieSubmit(e, title, description, genre) {
+    e.preventDefault();
+    axios.post('/movies', {
+      title,
+      description,
+      genre,
+    }).then(res => {
+      this.resetMovies();
+    }).catch(err => console.log(err));
+  }
+
+  handleMovieEditSubmit(e, title, description, genre) {
+    e.preventDefault();
+    axios.put(`/movies/${this.state.currentMovieId}`, {
+      title,
+      description,
+      genre,
+    }).then(res => {
+      this.resetMovies();
+    }).catch(err => console.log(err));
+  }
+
+  selectEditedMovie(id) {
+    this.setState({
+      currentMovieId: id,
+    })
+  }
+
+  resetMovies() {
+    axios.get('/movies')
+      .then(res => {
+        this.setState({
+          movieData: res.data.data,
+          currentMovieId: null,
         })
       }).catch(err => console.log(err));
   }
