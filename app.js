@@ -9,11 +9,11 @@ const passport = require('passport');
 const app = express();
 require('dotenv').config();
 
-app.use((req, res, next) => {
-  console.log(req.session);
-  console.log(req.headers);
-  next();
-})
+// app.use((req, res, next) => {
+//   console.log(req.session);
+//   console.log(req.headers);
+//   next(); 
+// })
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -32,7 +32,7 @@ app.use(passport.session());
 
 app.use(express.static('public'));
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
@@ -41,6 +41,11 @@ app.listen(PORT, () => {
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/user/test', (req, res) => {
+  if (req.user) res.json({auth: true, user: req.user});
+  else res.json({auth: false});
 });
 
 

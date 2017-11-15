@@ -12,6 +12,8 @@ import Register from './components/Register';
 
 import MoviesList from './components/MoviesList';
 
+import User from './components/User';
+
 class App extends Component {
   constructor() {
     super();
@@ -34,10 +36,13 @@ class App extends Component {
   // LIFECYCLE
 
   componentDidMount() {
-    axios.get('/movies')
+    axios.all([axios.get('/movies'), axios.get('/user/test')])
       .then(res => {
+        console.log(res);
         this.setState({
-          movieData: res.data.data,
+          movieData: res[0].data.data,
+          auth: res[1].data.auth,
+          user: res[1].data.user,
         });
       }).catch(err => console.log(err));
   }
@@ -70,6 +75,10 @@ class App extends Component {
           selectEditedMovie={this.selectEditedMovie}
           currentMovieId={this.state.currentMovieId}  />)
         break;
+      case 'user':
+          if (this.state.auth) return <User user={this.state.user} />
+          return <p>not logged in</p>
+          break;
       default:
         break;
     }
