@@ -9,6 +9,12 @@ const passport = require('passport');
 const app = express();
 require('dotenv').config();
 
+app.use((req, res, next) => {
+  console.log(req.session);
+  console.log(req.headers);
+  next();
+})
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,13 +37,13 @@ app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
-/* ROUTES WILL BE UNCOMMENTED LATER 
+
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-*/
+
 
 const authRoutes = require('./routes/auth-routes');
 app.use('/auth', authRoutes);
